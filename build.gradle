@@ -1,0 +1,46 @@
+plugins {
+    id 'java'
+    id 'org.springframework.boot' version '2.4.5'
+   // id "org.springdoc.openapi-gradle-plugin" version "1.3.3"
+    id 'groovy'
+}
+
+group 'org.reviews'
+version '1.0-SNAPSHOT'
+
+java {
+    sourceCompatibility  JavaVersion.VERSION_1_8
+}
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    implementation platform('org.springframework.boot:spring-boot-dependencies:2.4.5')
+    implementation 'org.springframework.boot:spring-boot-starter'
+    implementation("org.springdoc:springdoc-openapi-ui:1.3.3")
+    compileOnly("org.projectlombok:lombok:1.18.22")
+    annotationProcessor 'org.projectlombok:lombok:1.18.22'
+
+    implementation("org.springframework.boot:spring-boot-starter-data-mongodb")
+    implementation("de.flapdoodle.embed:de.flapdoodle.embed.mongo")
+
+    testImplementation('org.springframework.boot:spring-boot-starter-test')
+
+    // mandatory dependencies for using Spock
+    implementation 'org.codehaus.groovy:groovy:3.0.10'
+    testImplementation platform("org.spockframework:spock-bom:2.1-groovy-3.0")
+    testImplementation "org.spockframework:spock-core"
+
+    // optional dependencies for using Spock
+    testImplementation "org.hamcrest:hamcrest-core:2.2"   // only necessary if Hamcrest matchers are used
+    testRuntimeOnly 'net.bytebuddy:byte-buddy:1.12.8'
+    testRuntimeOnly "org.objenesis:objenesis:3.2"
+
+
+}
+
+test {
+    useJUnitPlatform()
+}
