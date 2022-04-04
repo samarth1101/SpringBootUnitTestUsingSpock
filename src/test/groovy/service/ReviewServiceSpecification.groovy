@@ -73,13 +73,14 @@ class ReviewServiceSpecification extends Specification {
 
     def "should be able to find all reviews"() {
         given:
-        def mockReview = new Review("R1", 1, 1)
-        reviewRepo.findAll() >> Arrays.asList(mockReview)
+        def mockReview1 = new Review("R1", 1, 1)
+        def mockReview2 = new Review("R2", 2, 1)
+        reviewRepo.findAll() >> Arrays.asList(mockReview1, mockReview2)
 
         when:
         def returnedReviews = reviewService.findAll()
 
         then:
-        returnedReviews.size() == 1
+        returnedReviews.size() == 2
     }
 }
