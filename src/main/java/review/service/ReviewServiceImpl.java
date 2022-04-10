@@ -1,14 +1,21 @@
 package review.service;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import review.dao.ReviewRepository;
+import review.domain.CustomerAccountsDetails;
 import review.domain.Review;
 
+import java.sql.Struct;
 import java.util.List;
 import java.util.Optional;
+import java.util.concurrent.CompletableFuture;
 
 @Service
 public class ReviewServiceImpl implements ReviewService {
+
+    @Autowired
+    private AccountsDetailsProvider accountsDetailsProvider;
 
     private ReviewRepository reviewRepository;
 
@@ -41,6 +48,20 @@ public class ReviewServiceImpl implements ReviewService {
 
     public void delete(String id) {
         reviewRepository.deleteById(id);
+    }
+
+    public CustomerAccountsDetails getResposne() {
+        CustomerAccountsDetails custAccountDetails = new CustomerAccountsDetails();
+        CompletableFuture<String> toAccountResponse = accountsDetailsProvider.retrieveToAccountDetails();
+        CompletableFuture<String> fromAccountResponse = accountsDetailsProvider.retrieveFromAccountsDetails();
+        CustomerAccountsDetails accountsDetails = CompletableFuture.allOf(toAccountResponse, fromAccountResponse).thenApply(accounts -> {
+            String toAccountDetails = toAccountResponse.join();
+            String fromAccountDetails = fromAccountResponse.join();
+            custAccountDetails.setToAccounts(toAccountDetails);
+            custAccountDetails.setFromAccounts((fromAccountDetails));
+            return custAccountDetails;
+        }).join();
+        return accountsDetails;
     }
 
 }

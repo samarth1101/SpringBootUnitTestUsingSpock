@@ -5,6 +5,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import review.domain.CustomerAccountsDetails;
 import review.domain.Review;
 import review.domain.ReviewEntry;
 import review.service.ReviewService;
@@ -24,6 +25,12 @@ public class ReviewController {
 
     public ReviewController(ReviewService service) {
         this.service = service;
+    }
+
+    @GetMapping("/getAccounts")
+    public ResponseEntity<CustomerAccountsDetails> getAccountsDetails () {
+        CustomerAccountsDetails accountsDetails = service.getResposne();
+        return ResponseEntity.ok().body(accountsDetails);
     }
 
     /**
